@@ -98,16 +98,16 @@ class Mancala:
                 state of the board after the player's move.
         """
         if pit > 6 or pit <= 0:
-            return print('Invalid number for pit index')
+            return 'Invalid number for pit index'
 
         if self.game_ended() == True:
-            return print('Game is ended')
+            return 'Game is ended'
         
         if player == 2:
             pit += 7
 
         if self._board[pit] == 0:
-            return print('That pit has no seeds, please pick another one')
+            return 'That pit has no seeds, please pick another one'
 
         seed_num = self._board[pit]
         self._board[pit] = 0
@@ -154,10 +154,10 @@ class Mancala:
         
         if seeds == 0:
             if player == 1 and start_pit == 7:
-                return print('player 1 take another turn')
+                return 'player 1 take another turn'
         
             if player == 2 and start_pit == 14:
-                return print('player 2 take another turn')
+                return 'player 2 take another turn'
     
     def p1_pits(self):
         """
@@ -255,13 +255,13 @@ class Mancala:
             result = self._board[7]/self._board[14]
 
             if result > 1:
-                return print(f'Winner is player 1: {self._player1}')
+                return f'Winner is player 1: {self._player1}'
             
             if result == 1:
-                return print("It's a tie")
+                return "It's a tie"
             
             if result < 1:
-                return print(f'Winner is player 2: {self._player2}')
+                return f'Winner is player 2: {self._player2}'
         
         if self.game_ended() != True:
-            return print('Game has not ended')
+            return 'Game has not ended'
