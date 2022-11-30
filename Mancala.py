@@ -33,7 +33,7 @@ class Mancala:
             8 : 4, 9 : 4, 10 : 4, 11 : 4, 12 : 4, 13 : 4, 14 : 0
         }
     
-    def create_player(self, player_name):
+    def create_players(self, player_name):
         """
         Method that creates a player and prints a warning if
         more than two players want to play a game.
@@ -42,6 +42,8 @@ class Mancala:
             player_name (str): name of the player
 
         Returns:
+            print('Only two players can play this game at the same time') (str):
+                message if more than two players want to play the game.
             Player(player_name) (obj): registers the player name
                 in the Player class.
         """
@@ -75,6 +77,10 @@ class Mancala:
         if player == 1:
             self._board[7] += self._board[pit]
             self._board[pit] = 0
+        
+        if player == 2:
+            self._board[14] += self._board[pit]
+            self._board[pit] = 0
 
     def play_game(self, player, pit):
         """
@@ -95,16 +101,21 @@ class Mancala:
             return print('Invalid number for pit index')
 
         if self.game_ended() == True:
-            self.return_winner()
             return print('Game is ended')
         
         if player == 2:
             pit += 7
 
+        if self._board[pit] == 0:
+            return print('That pit has no seeds, please pick another one')
+
         seed_num = self._board[pit]
         self._board[pit] = 0
 
         self.move_seed(player, pit, seed_num)
+
+        if self.game_ended() == True:
+            self.end_clear_board()
 
         return list(self._board.values())
     
@@ -136,9 +147,9 @@ class Mancala:
         
         if seeds == 0 and self._board[start_pit] == 1:
             if start_pit != 7 and start_pit != 14:
-                if player == 1 and start_pit in self.p1_pits():
+                if player == 1 and 1 <= start_pit <= 6:
                     self.check_for_opposite_pit(player, start_pit)
-                if player == 2 and start_pit in self.p2_pits():
+                if player == 2 and 8 <= start_pit <= 13:
                     self.check_for_opposite_pit(player, start_pit)
         
         if seeds == 0:
@@ -208,13 +219,28 @@ class Mancala:
         elif sum(self.p2_pits()) == 0:
             return True
 
-    def return_winner(self):
+    def end_clear_board(self):
         """
         Method that, if the game has ended, finishes the game
-        by moving all remaining pits to their side's store and
-        calculates who the winner is by comparing seed number 
-        in both player's stores. If the game has not ended prints
-        a warning.
+        by moving all remaining seeds to their side's store.
+        """
+        if sum(self.p1_pits()) != 0 or sum(self.p2_pits()) != 0: 
+            if sum(self.p1_pits()) == 0:
+                self._board[14] += sum(self.p2_pits())
+                for numbers in range(8,14):
+                    self._board[numbers] = 0
+            
+            elif sum(self.p2_pits()) == 0:
+                self._board[7] += sum(self.p1_pits())
+                for numbers in range(1,7):
+                    self._board[numbers] = 0
+
+
+    def return_winner(self):
+        """
+        Method that calculates who the winner is by comparing 
+        seed number in both player's stores. 
+        If the game has not ended prints a warning.
 
         Returns:
             print(f'Winner is player 1: {self._player1}') (str):
@@ -225,16 +251,6 @@ class Mancala:
             print('Game has not ended') (str): end condition not met.
         """
         if self.game_ended() == True:
-            if sum(self.p1_pits()) != 0 or sum(self.p2_pits()) != 0: 
-                if sum(self.p1_pits()) == 0:
-                    self._board[14] += sum(self.p2_pits())
-                    for numbers in range(8,14):
-                        self._board[numbers] = 0
-                
-                elif sum(self.p2_pits()) == 0:
-                    self._board[7] += sum(self.p1_pits())
-                    for numbers in range(1,7):
-                        self._board[numbers] = 0
 
             result = self._board[7]/self._board[14]
 
@@ -249,22 +265,3 @@ class Mancala:
         
         if self.game_ended() != True:
             return print('Game has not ended')
-            
-
-
-
-game = Mancala()
-player1 = game.create_player('Lily')
-player2 = game.create_player("Lucy")
-game.play_game(1, 1)
-game.play_game(1, 2)
-game.play_game(1, 3)
-game.play_game(1, 4)
-game.play_game(1, 5)
-game.play_game(1, 6)
-# game.play_game(1, 5)
-# game.print_board()
-game.return_winner()
-game.print_board()
-game.return_winner()
-game.print_board()
