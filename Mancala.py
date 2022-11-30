@@ -33,7 +33,7 @@ class Mancala:
             8 : 4, 9 : 4, 10 : 4, 11 : 4, 12 : 4, 13 : 4, 14 : 0
         }
     
-    def create_players(self, player_name):
+    def create_player(self, player_name):
         """
         Method that creates a player and prints a warning if
         more than two players want to play a game.
